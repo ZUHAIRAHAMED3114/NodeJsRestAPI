@@ -1,15 +1,21 @@
 var http = require('http');
 var url = require('url');
 var stringDecoder = require('string_decoder').StringDecoder;
-
+let { add, get } = Route();
+RegisterRoutes(add);
 var server = http.createServer(async(req, res) => {
 
     let requestObject = await getRequestData(req)
-    console.log(JSON.stringify(requestObject));
+    req.customReq = requestObject;
+    get(requestObject.Route)(req, res);
 
-    // Generating Respsne...
-    SendResponse(res);
 });
+server.listen(3000, () => {
+    console.log('This Server is Listnening in the Port 3000');
+});
+
+
+//This is the Heart....
 
 async function getRequestData(req) {
     var Route = getPath(req);
@@ -17,12 +23,7 @@ async function getRequestData(req) {
     var Params = getQueryString(req);
     var Headers = getHeaders(req);
     var Payload = await getPayloadPromise(req);
-    // var Payload=null;
-    // var task=  getPayloadPromise(req)
-    //         .then(x=> {
-    //             Payload=x;
-    //         });
-    //  console.log(task)
+
     function getHeaders(req) {
         return req.headers
     }
@@ -87,19 +88,45 @@ async function getRequestData(req) {
 }
 
 
-
-function SendResponse(res) {
+function SendResponse(res, message, statusCode, ContentType) {
     // Set response headers (e.g., content type)
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.writeHead(statusCode, { 'Content-Type': ContentType });
 
     // Write the response content
-    res.write('Hello, World!\n');
+    res.write(message);
 
     // End the response (send it to the client)
     res.end();
 }
 
+function Route() {
 
-server.listen(3000, () => {
-    console.log('This Server is Listnening in the Port 3000');
-});
+    let routs = {
+        'notfound': (req, res) => {
+            console.log('Router is Not Available For Above Path...');
+        }
+    }
+    return {
+        get: function(path) {
+            if (routs[path]) {
+                return routs[path];
+            }
+            return routs['notfound'];
+        },
+        add: function(path, callback) {
+            routs[path] = callback;
+        }
+    }
+}
+
+
+//Register Routes
+function RegisterRoutes(routes) {
+    //Register The Routes....
+    routes('test', (req, res) => {
+        console.log('In the test Mehtod')
+        console.log(JSON.stringify(req.customReq));
+        SendResponse(res, 'In the Test Message', 200, 'Application/json');
+    })
+
+}
