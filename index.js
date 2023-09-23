@@ -1,8 +1,12 @@
 var http = require('http');
 var url = require('url');
 var stringDecoder = require('string_decoder').StringDecoder;
+var config = require('./config')
+
 let { add, get } = Route();
 RegisterRoutes(add);
+
+
 var server = http.createServer(async(req, res) => {
 
     let requestObject = await getRequestData(req)
@@ -10,8 +14,8 @@ var server = http.createServer(async(req, res) => {
     get(requestObject.Route)(req, res);
 
 });
-server.listen(3000, () => {
-    console.log('This Server is Listnening in the Port 3000');
+server.listen(config.port, () => {
+    console.log('This Server is Listnening in the Port ' + config.port);
 });
 
 
