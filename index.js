@@ -2,7 +2,8 @@ var http = require('http');
 var config = require('./config')
 var Route = require('./route')
 
-var { SendResponse, getRequestData } = require('./reqres')
+var { SendResponse, getRequestData } = require('./reqres');
+var _data = require('./lib/data');
 var { add, get } = Route();
 var server = null;
 InitialSetup();
@@ -31,4 +32,7 @@ function RegisterRoutes(routes) {
         SendResponse(res, { message: 'In the Text Route...' }, 200, 'Application/json');
     })
 
+    routes('ping', (req, res) => {
+        SendResponse(res, { message: 'Iam Alive' }, 200, 'Application/json');
+    })
 }
