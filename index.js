@@ -89,11 +89,17 @@ async function getRequestData(req) {
 
 
 function SendResponse(res, message, statusCode, ContentType) {
+
+    var Message = message;
+    if (ContentType == 'Application/json') {
+        Message = JSON.stringify(message);
+    }
+
     // Set response headers (e.g., content type)
     res.writeHead(statusCode, { 'Content-Type': ContentType });
 
     // Write the response content
-    res.write(message);
+    res.write(Message);
 
     // End the response (send it to the client)
     res.end();
@@ -119,14 +125,13 @@ function Route() {
     }
 }
 
-
 //Register Routes
 function RegisterRoutes(routes) {
     //Register The Routes....
     routes('test', (req, res) => {
         console.log('In the test Mehtod')
         console.log(JSON.stringify(req.customReq));
-        SendResponse(res, 'In the Test Message', 200, 'Application/json');
+        SendResponse(res, { message: 'In the Text Route...' }, 200, 'Application/json');
     })
 
 }
