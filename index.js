@@ -4,10 +4,11 @@ var url = require('url');
 var server = http.createServer((req, res) => {
 
     var reqPath = getPath(req);
+    var httpMethod = getHttpMehtod(req);
     if (!reqPath) {
-        console.log('then it is Hitting Without Route');
+        console.log('then it is Hitting Without Route ' + httpMethod);
     } else {
-        console.log(`host address ${reqPath}`);
+        console.log(`host address ${reqPath} through ${httpMethod}`);
     }
     // Generating Respsne...
     SendResponse(res);
@@ -17,6 +18,10 @@ function getPath(req) {
     var parsed = url.parse(req.url)
     var trimmedPath = parsed.pathname.replace(/^\/+|\/+$/g, '')
     return trimmedPath;
+}
+
+function getHttpMehtod(req) {
+    return req.method.toLowerCase();
 }
 
 function SendResponse(res) {
