@@ -7,6 +7,9 @@ var _data = require('./lib/data');
 var { add, get } = Route();
 var server = null;
 InitialSetup();
+// _data.create('test', 'newfile', { "hi": 1 }, (err) => { if (err) console.log(err) });
+// _data.read('test', 'newfile', (data) => { if (data) console.log(data) });
+_data.update('test', 'newfile', { "hi": 3 }, (data) => { if (data) console.log(data) });
 
 function InitialSetup() {
     RegisterRoutes(add);
