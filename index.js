@@ -9,7 +9,9 @@ var server = null;
 InitialSetup();
 // _data.create('test', 'newfile', { "hi": 1 }, (err) => { if (err) console.log(err) });
 // _data.read('test', 'newfile', (data) => { if (data) console.log(data) });
-_data.update('test', 'newfile', { "hi": 3 }, (data) => { if (data) console.log(data) });
+//_data.update('test', 'newfile', { "hi": 3 }, (data) => { if (data) console.log(data) });
+_data.delete('test', 'newfile', (data) => { if (data) console.log(`File is Deleted SuccessFully`) });
+
 
 function InitialSetup() {
     RegisterRoutes(add);
